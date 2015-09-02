@@ -4,7 +4,7 @@
 
 ## Weasel. Lightweight flat file CMS written in PHP
 
-<img src="http://localhost/www/remote/weasel.moro.es/weasel.png" width="265" style="float: right; margin: 0 0 10px 20px;" />
+<img src="http://weasel.moro.es/weasel.png" width="265" style="float: right; margin: 0 0 10px 20px;" />
 
 Weasel CMS is an Open Source, very simple and lightweight Content Management System written in PHP and built specifically for small websites.
 Easy to setup, Weasel CMS uses a flat file system (No database) so you just have to unzip and upload it to the server and you are all set to add content with its easy to use simplistic UI.
