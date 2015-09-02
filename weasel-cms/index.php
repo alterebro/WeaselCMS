@@ -246,7 +246,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<title>Weasel CMS</title>
 	<meta name="author" content="Jorge Moreno aka Moro (@alterebro). http://moro.es" />
-	<link rel="stylesheet" type="text/css" href="cms.css" />
+	<link rel="stylesheet" type="text/css" href="cms.min.css" />
 </head>
 <body>
 
