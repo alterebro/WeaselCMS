@@ -7,7 +7,9 @@
 <img src="http://weasel.moro.es/weasel.png" width="265" style="float: right; margin: 0 0 10px 20px;" />
 
 Weasel CMS is an Open Source, very simple and lightweight Content Management System written in PHP and built specifically for small websites.
+
 Easy to setup, Weasel CMS uses a flat file system (No database) so you just have to unzip and upload it to the server and you are all set to add content with its easy to use simplistic UI.
+
 Weasel CMS is a very flexible CMS that can be easily used as a skeleton to build your small project up from.
 
 - **Very Simple** : No clutter and confusion, a simplistic site editor and UI.
@@ -28,7 +30,7 @@ Apache `mod_rewrite` module enabled is recommended but not a requirement.
 
 
 ### Installation
-1. Download the latest version of **Weasel CMS** from the GitHub repository
+1. Download the latest version of **Weasel CMS** from the GitHub repository : https://github.com/alterebro/WeaselCMS/releases/latest
 2. Upload the files to your PHP Server
 3. Change permissions to the following files to make them writable: `config.php`, `db.dat`
 4. That's all, start using Weasel CMS.
@@ -40,10 +42,12 @@ Default installation user/pass pair is :
 	
 You can change this login details on the `config.php` file
 
+
 ### Theming
 
 Themes are located on the `/theme` folder and the main template file is the `ìndex.html` HTML file.
 Variables are placed using the double curly bracket syntax `{{ $variable_name }}` i.e: in order to print the page title you'll put the folliwing code in the html template: `{{ $_CMS['page']['title'] }}`
+
 
 #### Variables
 
@@ -76,6 +80,11 @@ All the elements that you can use when theming your website using Weasel CMS dat
 - [PageDown Markdown Editor](https://github.com/timmyomahony/pagedown) The WMD Markdown Editor used in Stack Overflow.
 - [Font Awesome](https://fortawesome.github.io/Font-Awesome/) Awesome Icon Font
 - [ParseDown](http://parsedown.org/) Markdown Parser in PHP
+
+
+## Download
+Get the latest release on the Weasel CMS GitHub repository : 
+https://github.com/alterebro/WeaselCMS/releases/latest
 
 
 ## MIT Open Source License
