@@ -1,0 +1,58 @@
+body {
+  font-weight: 400;
+  font-family: 'Inconsolata', monospace;
+  color: #ddd;
+  background: #222;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  letter-spacing: 0;
+}
+h1 {
+  font-size: 3.2rem;
+}
+h2 {
+  font-size: 2.8rem;
+}
+h3 {
+  font-size: 2.6rem;
+}
+h4 {
+  font-size: 2.4rem;
+}
+h5 {
+  font-size: 1.8rem;
+}
+h6 {
+  font-size: 1.6rem;
+}
+li {
+  margin-bottom: .2rem;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  color: #fff;
+}
+#main {
+  padding: 8rem 0 4rem 0;
+  font-size: 1.6rem;
+}
+.container {
+  max-width: 960px;
+}
+hr {
+  border-color: #555;
+}
+code,
+pre > code {
+  background: #000;
+  color: #eee;
+  border: solid #444 1px;
+}

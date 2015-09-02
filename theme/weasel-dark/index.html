@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html lang="{{ $_CMS['site']['site_language']; }}">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>{{ $_CMS['site']['site_title']; }}</title>
+	<meta name="description" content="{{ $_CMS['site']['site_description']; }}" />
+	<meta name="keywords" content="{{ $_CMS['site']['site_keywords']; }}" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" rel="stylesheet" type="text/css" />
+	<link href="theme/weasel-dark/weasel-dark.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="container">
+
+
+	<div id="main" class="row">
+
+		<header class="four columns">
+			<h1><a href="{{ $_CMS['site']['path'] }}">{{ $_CMS['site']['site_title'] }}</a></h1>
+			<p>{{ $_CMS['site']['site_description'] }}</p>
+			<nav>{{ $_CMS['menu'] }}</nav>
+		</header>
+
+		<main class="eight columns">
+			<article>
+				<header>
+					<h1>{{ $_CMS['page']['title'] }}</h1>
+					<?php if($_CMS['page']['description']) : ?><p>{{ $_CMS['page']['description'] }}</p><?php endif; ?>
+				</header>
+				{{ $_CMS['page']['content'] }}
+
+				<!--
+				<footer>
+					Posted : <a href="{{ $_CMS['page']['link'] }}" title="{{ $_CMS['page']['title'] }}">{{ $_CMS['page']['timedate'] }}</a>
+					<?php if($_CMS['page']['tags']) : ?>&mdash; Tags : <em>{{ $_CMS['page']['tags'] }}<?php endif; ?></em>
+				</footer>
+				-->
+			</article>
+		</main>
+
+	</div>
+
+	<footer>
+		<hr />
+		<p><small>Powered by <a href="http://weasel.moro.es" title="Weasel. Lightweight flat file CMS">Weasel CMS</a></small></p>
+	</footer>
+
+</body>
+</html>
