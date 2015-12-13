@@ -1,15 +1,15 @@
-<?php 
+<?php
 header('Content-Type: text/html; charset=utf-8');
 
 function CMS_DATA() {
 
 	$cms_folder = 'weasel-cms/';
 	require_once $cms_folder . 'parsedown.php';
-	
+
 	$_DATA = [];
 	$_DATA['site'] = include $cms_folder . 'config.php';
 	$_DATA['site']['path'] = dirname($_SERVER['PHP_SELF']);
-	
+
 		unset($_DATA['site']['user']);
 		unset($_DATA['site']['pass']);
 
@@ -20,17 +20,25 @@ function CMS_DATA() {
 		$_DATA['pages'][] = json_decode($data_line, true);
 	}
 
+	// Detect rewrite module
+	$rewrite_enabled = false;
+	if (function_exists("apache_get_modules")) {
+		$rewrite_enabled = ( in_array('mod_rewrite', apache_get_modules()) );
+	} else {
+		$rewrite_enabled = ( isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'on' );
+	}
+
 	// Order the data array by descending datetime, extract slugs and exclude inactive posts
 	$db_slugs = array();
 	$items_datetime = array();
 	foreach ($_DATA['pages'] as $key => $row) {
-		if ( empty($row['active']) ) { 
+		if ( empty($row['active']) ) {
 			unset( $_DATA['pages'][$key] );
 		} else {
 		    $items_datetime[$key] = $row['timedate'];
 			$db_slugs[] = $row['slug'];
 
-			$_DATA['pages'][$key]['link'] = (in_array('mod_rewrite', apache_get_modules())) 
+			$_DATA['pages'][$key]['link'] = ($rewrite_enabled)
 				? dirname($_SERVER['PHP_SELF']) .'/'. $row['slug'] . '.cms' // Match it with the .htaccess file
 				: 'index.php?p=' . $row['slug'];
 
@@ -55,7 +63,7 @@ function CMS_DATA() {
 				$_DATA['is_page'] = true;
 				break;
 			}
-		}	
+		}
 	}
 
 	// Navigation Menu output
