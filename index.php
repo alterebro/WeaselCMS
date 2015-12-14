@@ -4,9 +4,11 @@ header('Content-Type: text/html; charset=utf-8');
 function CMS_DATA() {
 
 	$cms_folder = 'weasel-cms/';
+	$cms_version = '0.3.0';
 	require_once $cms_folder . 'parsedown.php';
 
 	$_DATA = [];
+	$_DATA['version'] = $cms_version;
 	$_DATA['site'] = include $cms_folder . 'config.php';
 	$_DATA['site']['path'] = dirname($_SERVER['PHP_SELF']);
 
