@@ -7,4 +7,5 @@
   'site_description' => 'Open Source, very simple and lightweight flat file Content Management System written in PHP and built specifically for small websites.',
   'site_keywords' => 'Weasel, WeaselCMS, PHP, CMS, Simple, lightweight, small, easy, Minimal',
   'theme' => 'weasel',
+  'files_folder' => '../files',
 );

@@ -39,6 +39,7 @@ function CMS_DATA() {
 			$db_slugs[] = $row['slug'];
 
 			$_DATA['pages'][$key]['link'] = ($rewrite_enabled)
+				// TODO: fix this
 				? dirname($_SERVER['PHP_SELF']) .'/'. $row['slug'] . '.cms' // Match it with the .htaccess file
 				: 'index.php?p=' . $row['slug'];
 

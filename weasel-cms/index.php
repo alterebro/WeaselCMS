@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 header('Content-Type: text/html; charset=utf-8');
 
@@ -20,10 +20,10 @@ function set_message($str, $warning = false) {
 	$_SESSION['message'] = array(
 		'string' => $str,
 		'warning' => $warning
-	);	
+	);
 }
 function get_message() {
-	$output = false;	
+	$output = false;
 	if ( isset($_SESSION['message']) ) {
 		$output = $_SESSION['message'];
 	}
@@ -54,12 +54,12 @@ array_multisort($items_datetime, SORT_DESC, $db);
 
 
 // Initialize and get the url variables.
-$allowed_blocks = array('pages');
-$allowed_actions = array('new', 'edit', 'logout'); // actions on GET
-$allowed_pages = $db_slugs; 
+$allowed_blocks = array('pages', 'files');
+$allowed_actions = array('new', 'edit', 'logout', 'remove'); // actions on GET
+$allowed_pages = $db_slugs;
 
-$_v['block'] 	= ( isset($_GET['b']) && in_array($_GET['b'], $allowed_blocks) ) ? $_GET['b'] : false; 		// url for 'b' : pages | false
-$_v['action'] 	= ( isset($_GET['a']) && in_array($_GET['a'], $allowed_actions) ) ? $_GET['a'] : false; 	// url for 'a' : new | edit | false
+$_v['block'] 	= ( isset($_GET['b']) && in_array($_GET['b'], $allowed_blocks) ) ? $_GET['b'] : false; 		// url for 'b' : pages | files | false
+$_v['action'] 	= ( isset($_GET['a']) && in_array($_GET['a'], $allowed_actions) ) ? $_GET['a'] : false; 	// url for 'a' : new | edit | logout | remove | false
 $_v['page'] 	= ( isset($_GET['p']) && in_array($_GET['p'], $allowed_pages) ) ? $_GET['p'] : false; 		// url for 'p' : slug | false
 $_v['logged'] 	= ( isset($_SESSION['logged']) && $_SESSION['logged'] == true ) ? true : false;
 
@@ -93,12 +93,26 @@ if ( $_v['action'] == 'logout' ) {
 	}
 }
 
+// Check for removing files.
+if ( $_v['block'] == 'files' && $_v['action'] == 'remove' && isset($_GET['file']) ) {
+	$the_file = realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . $_c['files_folder']) . DIRECTORY_SEPARATOR . $_GET['file'];
+	if ( file_exists($the_file) ) {
+		unlink($the_file);
+	}
 
+	set_message('File removed successfully');
+	header( 'Location: ' . $_SERVER['PHP_SELF'] . '?b=files' );
+	exit();
+}
+
+
+// -----------------
+// POST
 if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
 	// -- Check for changes on the Settings.
 	if ( isset($_POST['settings-submit']) ) {
-	
+
 		$_c['site_language'] = $_POST["site-language"];
 		$_c['site_title'] = $_POST["site-title"];
 		$_c['site_description'] = $_POST["site-description"];
@@ -130,7 +144,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		$tags = $_POST['page-tags'];
 		$tags = explode(',', $tags);
 		$tags = array_map('trim', $tags);
-		
+
 		$data['tags'] = $tags;
 		$data['active'] = ( !empty($_POST['page-active']) ) ? true : false;
 
@@ -141,28 +155,28 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		if ( empty($data['slug']) ) { $error[] = 'Empty slug'; }
 
 		// -----------------
-		// No error found? 
+		// No error found?
 		if ( empty($error) ) {
 
 			$data = json_encode( $data );
 			file_put_contents($_c['db'], $data . PHP_EOL , FILE_APPEND);
 
 			set_message('Page Created');
-			header( 'Location: ' . $_SERVER['PHP_SELF'] );			
+			header( 'Location: ' . $_SERVER['PHP_SELF'] );
 			exit();
 
 		} else {
 
 			// Notify error
 			set_message('ERROR: Page NOT CREATED, ' . implode(', ', $error), true);
-			header( 'Location: ' . $_SERVER['PHP_SELF'] );			
+			header( 'Location: ' . $_SERVER['PHP_SELF'] );
 			exit();
 		}
 	} // --
 
 	// -- Check for edit page
 	if ( isset($_POST['page-action']) && $_POST['page-action'] == 'edit' ) {
-	
+
 		$db_buffer = array();
 		$db_buffer_slugs = array();
 		foreach ($db as $db_item) {
@@ -189,7 +203,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		$tags = $_POST['page-tags'];
 		$tags = explode(',', $tags);
 		$tags = array_map('trim', $tags);
-		
+
 		$data['tags'] = $tags;
 		$data['active'] = ( !empty($_POST['page-active']) ) ? true : false;
 
@@ -200,9 +214,9 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		if ( empty($data['slug']) ) { $error[] = 'Empty slug'; }
 
 		// -----------------
-		// No error? 
+		// No error?
 		if ( empty($error) ) {
-		
+
 			$output = '';
 			foreach ($db_buffer as $db_buffer_item) {
 				$output .= json_encode( $db_buffer_item ) . PHP_EOL;
@@ -211,14 +225,14 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 			file_put_contents($_c['db'], $output , LOCK_EX);
 
 			set_message('Page edited successfully');
-			header( 'Location: ' . $_SERVER['PHP_SELF'] );			
+			header( 'Location: ' . $_SERVER['PHP_SELF'] );
 			exit();
 
 		} else {
 
 			// Notify error
 			set_message('ERROR: Page NOT EDITED, ' . implode(', ', $error), true);
-			header( 'Location: ' . $_SERVER['PHP_SELF'] );			
+			header( 'Location: ' . $_SERVER['PHP_SELF'] );
 			exit();
 		}
 	} // --
@@ -230,15 +244,43 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		foreach ($db as $db_item) {
 			if ( $db_item['timestamp'] != $_POST['page-timestamp'] ) {
 				$output .= json_encode( $db_item ) . PHP_EOL;
-			} 
+			}
 		}
 		file_put_contents($_c['db'], $output , LOCK_EX);
 
 		set_message('Page Removed');
-		header( 'Location: ' . $_SERVER['PHP_SELF'] );			
+		header( 'Location: ' . $_SERVER['PHP_SELF'] );
 		exit();
 	} // --
-} 
+
+
+	// -- Check for new fileupload.
+	if ( isset($_POST['fileupload-submit'])
+			&& isset($_FILES['fileupload-file'])
+			&& $_FILES['fileupload-file']['error'] == 0
+		) {
+
+		require_once 'upload.php';
+		$root_folder = realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . $_c['files_folder']);
+		$upload = Upload::factory( '', $root_folder );
+		$upload->file($_FILES['fileupload-file']);
+		$upload->set_max_file_size(2);
+		$upload->set_allowed_mime_types(array("image/jpeg", "image/png", "image/gif"));
+		$upload->set_filename($_FILES['fileupload-file']['name']);
+		$upload_output = $upload->upload();
+		$upload_error = $upload->get_errors();
+
+		if ( empty($upload_error) ) {
+			set_message('File uploaded');
+		} else {
+			set_message('Error uploading file: <br /> &bull; ' . implode('<br /> &bull; ', $upload_error), true);
+		}
+		header( 'Location: ' . $_SERVER['PHP_SELF'] . '?b=files' );
+		exit();
+
+	} // --
+
+}
 ?><!DOCTYPE HTML>
 <html>
 <head>
@@ -257,6 +299,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		<ul>
 			<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>"><i class="fa fa-bars"></i> Dashboard</a></li>
 			<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=pages&amp;a=new"><i class="fa fa-file-text-o"></i> Create a new page</a></li>
+			<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=files"><i class="fa fa-upload"></i> Files</a></li>
 			<li><a href="?a=logout"><i class="fa fa-sign-out"></i> Log out</a></li>
 		</ul>
 	</nav>
@@ -264,7 +307,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 	<hr />
 </header>
 
-<main>	
+<main>
 
 
 <?php $msg = get_message(); if ( !empty($msg) ) : ?>
@@ -285,13 +328,13 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 			<label for="login-user">
 				<span><i class="fa fa-user"></i> Username</span>
 				<input type="text" name="login-user" id="login-user" />
-			</label>	
+			</label>
 		</p>
 		<p>
 			<label for="login-pass">
 				<span><i class="fa fa-unlock-alt"></i> Password</span>
 				<input type="password" name="login-pass" id="login-pass" />
-			</label>	
+			</label>
 		</p>
 		<p>
 			<input type="submit" value="Log In" name="login-submit" id="login-submit" />
@@ -303,7 +346,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
 	<?php if ( ($_v['block']) == 'pages' ) : ?>
 	<?php // PAGES ------------------------- ?>
-	<?php 
+	<?php
 		// Default values when creating a new page.
 		$the_action = 'create';
 		$the_title = '';
@@ -372,7 +415,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 			        	<span>Page Content Preview</span>
 				        <div id="wmd-preview" class="wmd-panel wmd-preview markdown-body"></div>
 			        </label>
-				</p>		
+				</p>
 			</section>
 
 			<section class="column-one-third">
@@ -387,7 +430,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 						<span><i class="fa fa-clock-o"></i> Time</span>
 						<input type="time" name="page-time" id="page-time" value="<?php echo $the_time; ?>" required="required" />
 					</label>
-				</p>			
+				</p>
 
 				<p>
 					<label for="page-slug">
@@ -409,7 +452,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 				</p>
 				<p>
 					<label for="page-active">
-						<input type="checkbox" name="page-active" id="page-active" <?php echo $the_status; ?>/> 
+						<input type="checkbox" name="page-active" id="page-active" <?php echo $the_status; ?>/>
 						Status (Published)
 					</label>
 				</p>
@@ -429,6 +472,60 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		</form>
 		<?php endif; ?>
 
+	<?php elseif ( ($_v['block']) == 'files' ) : ?>
+	<?php // FILES ------------------------- ?>
+	<?php
+		$uploaded_files = glob($_c['files_folder'] . '/*');
+		usort($uploaded_files, function($a, $b) {
+		    return filemtime($a) < filemtime($b);
+		});
+		$files_dir = $uploaded_files;
+		// $files_dir = array_diff(scandir($_c['files_folder']), array('..', '.', '.DS_Store'));
+	?>
+
+		<div class="row">
+
+			<section class="column-one-third">
+				<h2>Upload new Image</h2>
+				<p>
+					Only .jpg, .gif and .png image files are allowed.
+					<br />Maximum file size is 2Mb.
+				</p>
+
+				<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
+					<input type="file" name="fileupload-file" />
+					<input type="submit" name="fileupload-submit" value="Upload!" />
+				</form>
+			</section>
+
+			<section class="column-two-thirds">
+				<h2>Uploaded Images</h2>
+
+				<?php if(empty($files_dir)) : ?>
+					<p><i class="fa fa-exclamation-triangle"></i> No files uploaded.</p>
+				<?php else : ?>
+					<table>
+						<thead>
+							<tr>
+								<th>File Name</th>
+								<th class="align-right">Created on</th>
+								<th class="align-right">Remove File</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach($files_dir as $file) : ?>
+							<tr>
+								<td><i class="fa fa-image fa-fw"></i> <a href="<?php echo $_c['files_folder'] . DIRECTORY_SEPARATOR . $file; ?>"><?php echo basename($file); ?></td>
+								<td class="align-right"><?php echo date ("d/m/y @H:i:s", filemtime($_c['files_folder'] . DIRECTORY_SEPARATOR . $file)); ?></td>
+								<td class="align-right"><a href="<?php echo $_SERVER['PHP_SELF'] . '?b=files&a=remove&file=' . basename($file); ?>" class="remove-file-button">Delete</a></td>
+							</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				<?php endif; ?>
+			</section>
+		</div>
+
 	<?php else : ?>
 	<?php // SETTINGS & DASHBOARD ---------- ?>
 
@@ -441,32 +538,32 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 					<p>
 						<label for="site-language">
 							<span>Site Language <small>( 2 letter i.e: ES, EN )</small></span>
-							<input type="text" name="site-language" id="site-language" value="<?php echo $_c['site_language']; ?>" />					
-						</label>	
+							<input type="text" name="site-language" id="site-language" value="<?php echo $_c['site_language']; ?>" />
+						</label>
 					</p>
 					<p>
 						<label for="site-title">
 							<span>Site Title</span>
 							<input type="text" name="site-title" id="site-title" value="<?php echo $_c['site_title']; ?>" />
-						</label>	
+						</label>
 					</p>
 					<p>
 						<label for="site-description">
 							<span>Site Description</span>
 							<input type="text" name="site-description" id="site-description" value="<?php echo $_c['site_description']; ?>" />
-						</label>	
+						</label>
 					</p>
 					<p>
 						<label for="site-keywords">
 							<span>Site Keywords <small>( Comma separated values )</small></span>
 							<input type="text" name="site-keywords" id="site-keywords" value="<?php echo $_c['site_keywords']; ?>" />
-						</label>	
+						</label>
 					</p>
 					<p>
 						<label for="site-theme">
 						 	<span>Theme</span>
 						 	<select name="site-theme" id="site-theme">
-		 						<?php 
+		 						<?php
 									$themes = scandir('../theme');
 									foreach ($themes as $theme) {
 										if ( (substr($theme, 0, 1) != '.') && is_dir('../theme/' . $theme) ) {
@@ -482,7 +579,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 					</p>
 				</form>
 			</section>
-			
+
 			<section class="column-two-thirds">
 				<h2>Pages</h2>
 				<table>
@@ -504,23 +601,23 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 								<small><i class="fa fa-calendar"></i> <?php echo date("Y.m.j", $item['timedate']); ?>&nbsp; <i class="fa fa-clock-o"></i> <?php echo date("H:i", $item['timedate']); ?></small>
 							</td>
 							<td class="align-right"><?php echo ($item['active']) ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>' ; ?></td>
-						</tr>	
+						</tr>
 					<?php endforeach; ?>
 					</tbody>
 				</table>
-				<p class="align-right"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=pages&amp;a=new" class="button">Create a new page <i class="fa fa-plus"></i></a></p>				
+				<p class="align-right"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=pages&amp;a=new" class="button">Create a new page <i class="fa fa-plus"></i></a></p>
 			</section>
 
 		</div>
 	<?php endif; ?>
 
 <?php endif; ?>
-</main>	
+</main>
 <footer>
 	<hr />
 	<p>
-		<a href="http://weasel.moro.es" title="Weasel CMS"><strong>Weasel CMS</strong></a> 
-		&mdash; MIT Licensed Supersimple Flat file PHP Content Management System. 		
+		<a href="http://weasel.moro.es" title="Weasel CMS"><strong>Weasel CMS</strong></a>
+		&mdash; MIT Licensed Supersimple Flat file PHP Content Management System.
 		<br />
 		Designed and developed by <a href="http://moro.es">Jorge Moreno</a> (<a href="https://twitter.com/alterebro">@alterebro</a>)
 	</p>

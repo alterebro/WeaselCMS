@@ -32,7 +32,7 @@ Apache `mod_rewrite` module enabled is recommended but not a requirement.
 ### Installation
 1. Download the latest version of **Weasel CMS** from the GitHub repository : https://github.com/alterebro/WeaselCMS/releases/latest
 2. Upload the files to your PHP Server
-3. Change permissions to the following files to make them writable: `config.php`, `db.dat`
+3. Change permissions to the following files / folder to make them writable: `config.php`, `db.dat`, `/files`.
 4. That's all, start using Weasel CMS.
 
 Default installation user/pass pair is :
@@ -80,6 +80,8 @@ All the elements that you can use when theming your website using Weasel CMS dat
 - [PageDown Markdown Editor](https://github.com/timmyomahony/pagedown) The WMD Markdown Editor used in Stack Overflow.
 - [Font Awesome](https://fortawesome.github.io/Font-Awesome/) Awesome Icon Font
 - [ParseDown](http://parsedown.org/) Markdown Parser in PHP
+- [PHP File Upload Class](https://github.com/aivis/PHP-file-upload-class) Simple php upload class with file validation
+
 
 
 ## Download
