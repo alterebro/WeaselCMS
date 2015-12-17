@@ -39,7 +39,7 @@ Default installation user/pass pair is :
 
 	user : weasel
 	pass : weaselcms
-	
+
 You can change this login details on the `config.php` file
 
 
@@ -53,16 +53,17 @@ Variables are placed using the double curly bracket syntax `{{ $variable_name }}
 
 All the elements that you can use when theming your website using Weasel CMS data are encapsulated in an array called `$_CMS`, this array has got the following variables within it.
 
-- `$_CMS['site']` : 
-	- `['site_language']` ISO 639-1 Language Code, usually the two letter identifier like: *EN*, *ES*, *FR* ... 
+- `$_CMS['site']` :
+	- `['site_language']` ISO 639-1 Language Code, usually the two letter identifier like: *EN*, *ES*, *FR* ...
 	- `['site_title']` : Returns the current weather in Beijing, China ... nah, it's actually the **Site Title**.
     - `['site_description']` : mainly for seo purposes
     - `['site_keywords']` : Same as above.
 	- `['path]` : base directory ( `dirname($_SERVER['PHP_SELF'])` )
+	- `['url]` : url where the website resides ( `HTTP_HOST + path` )
 
 - `$_CMS['pages']` : Variable containing all the data of every page in case you want to loop over it. Each page contains the following properties described below on the `$_PAGE` variable.
 
-- `$_CMS['page']` : 
+- `$_CMS['page']` :
 	- `['title']` The page title
     - `['description']` Short description of the page
     - `['content']` This is stored as Markdown but it returns the parsed HTML code of the pages content
@@ -70,6 +71,8 @@ All the elements that you can use when theming your website using Weasel CMS dat
     - `['timedate']` Returned by default in the form : YYYY.MM.DD HH:MM *( Date: Y.m.j H:i )*
 	- `['link']` Returns the full url friendly link of the page in case `mod_rewite` exists on the Apache modules or the link with a url get variable in case it doesn't `?p=url-slug`
 	- `['slug']` the slug defined on the admin area.
+	- `['prev_page']` full url friendly link to the previous page if exists, otherwise will return a link to the site url.
+	- `['next_page']` full url friendly link to the next page if exists, otherwise will return a link to the site url.
 
 - `$_CMS['is_page']` : Boolean returns if it is a page or not ( *Useful to filter the index/home page* )
 - `$_CMS['menu']` : Retuns an HTML unordered list with all the active pages linked to their pages. With an active class on the current element ( `class="active"` )
@@ -85,7 +88,7 @@ All the elements that you can use when theming your website using Weasel CMS dat
 
 
 ## Download
-Get the latest release on the Weasel CMS GitHub repository : 
+Get the latest release on the Weasel CMS GitHub repository :
 https://github.com/alterebro/WeaselCMS/releases/latest
 
 
@@ -95,5 +98,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-

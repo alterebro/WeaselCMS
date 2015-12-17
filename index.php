@@ -4,13 +4,35 @@ header('Content-Type: text/html; charset=utf-8');
 function CMS_DATA() {
 
 	$cms_folder = 'weasel-cms/';
-	$cms_version = '0.3.0';
+	$cms_version = '0.3.1';
 	require_once $cms_folder . 'parsedown.php';
+
+	function create_link($slug) {
+
+		if (!$slug) { return dirname($_SERVER['PHP_SELF']); }
+
+		// Detect rewrite module
+		$rewrite_enabled = false;
+		if (function_exists("apache_get_modules")) {
+			$rewrite_enabled = ( in_array('mod_rewrite', apache_get_modules()) );
+		} else {
+			$rewrite_enabled = ( isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'on' );
+		}
+
+		// Create the link
+		$link = ($rewrite_enabled)
+			// TODO: fix this
+			? dirname($_SERVER['PHP_SELF']) .'/'. $slug . '.cms' // Match it with the .htaccess file
+			: 'index.php?p=' . $slug;
+
+		return $link;
+	}
 
 	$_DATA = [];
 	$_DATA['version'] = $cms_version;
 	$_DATA['site'] = include $cms_folder . 'config.php';
 	$_DATA['site']['path'] = dirname($_SERVER['PHP_SELF']);
+	$_DATA['site']['url'] = 'http://' . $_SERVER['HTTP_HOST'] . dirname( $_SERVER['PHP_SELF'] ) . '/';
 
 		unset($_DATA['site']['user']);
 		unset($_DATA['site']['pass']);
@@ -22,14 +44,6 @@ function CMS_DATA() {
 		$_DATA['pages'][] = json_decode($data_line, true);
 	}
 
-	// Detect rewrite module
-	$rewrite_enabled = false;
-	if (function_exists("apache_get_modules")) {
-		$rewrite_enabled = ( in_array('mod_rewrite', apache_get_modules()) );
-	} else {
-		$rewrite_enabled = ( isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'on' );
-	}
-
 	// Order the data array by descending datetime, extract slugs and exclude inactive posts
 	$db_slugs = array();
 	$items_datetime = array();
@@ -38,12 +52,9 @@ function CMS_DATA() {
 			unset( $_DATA['pages'][$key] );
 		} else {
 		    $items_datetime[$key] = $row['timedate'];
-			$db_slugs[] = $row['slug'];
 
-			$_DATA['pages'][$key]['link'] = ($rewrite_enabled)
-				// TODO: fix this
-				? dirname($_SERVER['PHP_SELF']) .'/'. $row['slug'] . '.cms' // Match it with the .htaccess file
-				: 'index.php?p=' . $row['slug'];
+			$_DATA['pages'][$key]['link'] = create_link($row['slug']);
+			$_DATA['pages'][$key]['slug'] = $row['slug'];
 
 			unset($_DATA['pages'][$key]['order']);
 			unset($_DATA['pages'][$key]['active']);
@@ -55,10 +66,15 @@ function CMS_DATA() {
 		}
 	}
 	array_multisort($items_datetime, SORT_DESC, $_DATA['pages']);
+	foreach ($_DATA['pages'] as $key => $value) {
+		$db_slugs[] = $_DATA['pages'][$key]['slug'];
+	}
 
 	// Get the current page data
 	$_DATA['page'] = $_DATA['pages'][0];
 	$_DATA['is_page'] = false;
+
+	$_page_iterator = 0;
 	if ( !empty($_GET['p']) && in_array($_GET['p'], $db_slugs) ) {
 		foreach ($_DATA['pages'] as $db_element) {
 			if ( $_GET['p'] == $db_element['slug'] ) {
@@ -66,8 +82,16 @@ function CMS_DATA() {
 				$_DATA['is_page'] = true;
 				break;
 			}
+			$_page_iterator++;
 		}
 	}
+
+	$_prev = ($_page_iterator == 0) ? false : $db_slugs[($_page_iterator-1)];
+	$_next = ($_page_iterator == count($db_slugs)-1) ? false : $db_slugs[$_page_iterator+1];
+
+	$_DATA['prev_page'] = create_link($_prev);
+	$_DATA['next_page'] = create_link($_next);
+
 
 	// Navigation Menu output
 	$_DATA['menu'] = '<ul>';
@@ -93,9 +117,7 @@ function WeaselCMS($_CMS) {
 
 }
 
-
 $_CMS = CMS_DATA();
 WeaselCMS($_CMS);
-
 
 ?>
