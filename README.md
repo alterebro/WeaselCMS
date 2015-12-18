@@ -72,11 +72,31 @@ All the elements that you can use when theming your website using Weasel CMS dat
 	- `['timedate']` Verbose time-date returned by default in the form (i.e) : *Thursday 12th of February 2009 @ 04:25 AM* `( Date: l jS \of F Y @ h:i A )`
 	- `['link']` Returns the full url friendly link of the page in case `mod_rewite` exists on the Apache modules or the link with a url get variable in case it doesn't `?p=url-slug`
 	- `['slug']` the slug defined on the admin area.
-	- `['prev_page']` full url friendly link to the previous page if exists, otherwise will return a link to the site url.
-	- `['next_page']` full url friendly link to the next page if exists, otherwise will return a link to the site url.
 
 - `$_CMS['is_page']` : Boolean returns if it is a page or not ( *Useful to filter the index/home page* )
 - `$_CMS['menu']` : Retuns an HTML unordered list with all the active pages linked to their pages. With an active class on the current element ( `class="active"` )
+- `$_CMS['prev_page']` full url friendly link to the previous page if exists, otherwise will return a link to the site url.
+- `$_CMS['next_page']` full url friendly link to the next page if exists, otherwise will return a link to the site url.
+
+#### Adding extra variables
+
+On the `config.php` file, you can add more `'key' => 'value'` items to the returned array so you can access to them later on the main template. They will be encapsulated in the parent array `$_CMS['site']`
+
+For example, by adding at the end of the config array the new pair : `'my_var' => 'my_value'`
+
+```php
+<?php return array (
+  'user' => 'weasel',
+  'pass' => 'weaselcms',
+  'db' => 'data.dat',
+  'site_language' => 'en',
+  ...
+  'files_folder' => '../files',
+  'my_var' => 'my_value',
+);
+```
+
+You can later call it by using the bracket syntax : `{{ $_CMS['site']['my_var'] }}`
 
 
 ## Libraries used in Weasel CMS
