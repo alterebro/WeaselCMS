@@ -68,7 +68,8 @@ All the elements that you can use when theming your website using Weasel CMS dat
     - `['description']` Short description of the page
     - `['content']` This is stored as Markdown but it returns the parsed HTML code of the pages content
 	- `['tags']` Comma separated tag values
-    - `['timedate']` Returned by default in the form : YYYY.MM.DD HH:MM *( Date: Y.m.j H:i )*
+	- `['datetime']` machine-readable date/time in the form : `1914-12-20 08:30:45`
+	- `['timedate']` Verbose time-date returned by default in the form (i.e) : *Thursday 12th of February 2009 @ 04:25 AM* `( Date: l jS \of F Y @ h:i A )`
 	- `['link']` Returns the full url friendly link of the page in case `mod_rewite` exists on the Apache modules or the link with a url get variable in case it doesn't `?p=url-slug`
 	- `['slug']` the slug defined on the admin area.
 	- `['prev_page']` full url friendly link to the previous page if exists, otherwise will return a link to the site url.

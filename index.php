@@ -60,7 +60,10 @@ function CMS_DATA() {
 			unset($_DATA['pages'][$key]['active']);
 			unset($_DATA['pages'][$key]['timestamp']);
 
-			$_DATA['pages'][$key]['timedate'] = date('Y.m.j H:i',$_DATA['pages'][$key]['timedate']);
+			$td = $_DATA['pages'][$key]['timedate'];
+			$_DATA['pages'][$key]['timedate'] = date('l jS \of F Y @ h:i A',$td);
+			$_DATA['pages'][$key]['datetime'] = date('Y-m-d H:i:s',$td);
+
 			$_DATA['pages'][$key]['tags'] = implode(', ', $_DATA['pages'][$key]['tags']);
 			$_DATA['pages'][$key]['content'] = Parsedown::instance()->text( $_DATA['pages'][$key]['content'] );
 		}
