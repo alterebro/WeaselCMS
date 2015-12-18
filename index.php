@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 function CMS_DATA() {
 
 	$cms_folder = 'weasel-cms/';
-	$cms_version = '0.3.1';
+	$cms_version = '0.3.2';
 	require_once $cms_folder . 'parsedown.php';
 
 	function create_link($slug) {
@@ -116,7 +116,12 @@ function WeaselCMS($_CMS) {
 	// Ugly and quick templating. Looking for a best way to implement this...
 	$template = file_get_contents('theme/'.$_CMS['site']['theme'].'/index.html');
 	$template = preg_replace('/{{ (.*?) }}/', '<?= $1; ?>', $template);
-	eval("?> $template <?php ");
+
+	// Minify output
+	$minify_search = array('/\>[^\S ]+/s', '/[^\S ]+\</s', '/(\s)+/s');
+	$minify_replace = array('>', '<', '\\1');
+	$output = preg_replace($minify_search, $minify_replace, $template);
+	eval("?> $output <?php ");
 
 }
 
