@@ -260,7 +260,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 			&& $_FILES['fileupload-file']['error'] == 0
 		) {
 
-		require_once 'upload.php';
+		require_once 'lib/upload.php';
 		$root_folder = realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . $_c['files_folder']);
 		$upload = Upload::factory( '', $root_folder );
 		$upload->file($_FILES['fileupload-file']);
