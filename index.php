@@ -1,38 +1,38 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 
+function create_link($slug) {
+
+	if (!$slug) { return dirname($_SERVER['PHP_SELF']); }
+
+	// Detect rewrite module
+	$rewrite_enabled = false;
+	if (function_exists("apache_get_modules")) { $rewrite_enabled = ( in_array('mod_rewrite', apache_get_modules()) ); }
+	else { $rewrite_enabled = ( isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'on' ); }
+
+	// Create the link
+	$path_separator = (dirname($_SERVER['PHP_SELF']) == '/') ? '' : '/';
+	$link = ($rewrite_enabled)
+		? dirname($_SERVER['PHP_SELF']) . $path_separator . $slug . '.cms' // Match it with the .htaccess file
+		: 'index.php?p=' . $slug;
+
+	return $link;
+}
+
+
 function CMS_DATA() {
 
 	$cms_folder = 'weasel-cms/';
-	$cms_version = '0.3.2';
+	$cms_version = '0.3.3';
 	require_once $cms_folder . 'parsedown.php';
-
-	function create_link($slug) {
-
-		if (!$slug) { return dirname($_SERVER['PHP_SELF']); }
-
-		// Detect rewrite module
-		$rewrite_enabled = false;
-		if (function_exists("apache_get_modules")) {
-			$rewrite_enabled = ( in_array('mod_rewrite', apache_get_modules()) );
-		} else {
-			$rewrite_enabled = ( isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'on' );
-		}
-
-		// Create the link
-		$link = ($rewrite_enabled)
-			// TODO: fix this
-			? dirname($_SERVER['PHP_SELF']) .'/'. $slug . '.cms' // Match it with the .htaccess file
-			: 'index.php?p=' . $slug;
-
-		return $link;
-	}
 
 	$_DATA = [];
 	$_DATA['version'] = $cms_version;
 	$_DATA['site'] = include $cms_folder . 'config.php';
 	$_DATA['site']['path'] = dirname($_SERVER['PHP_SELF']);
-	$_DATA['site']['url'] = 'http://' . $_SERVER['HTTP_HOST'] . dirname( $_SERVER['PHP_SELF'] ) . '/';
+
+	$_DATA['site']['url'] = 'http://' . $_SERVER['HTTP_HOST'] . dirname( $_SERVER['PHP_SELF'] );
+	$_DATA['site']['url'] .= (dirname($_SERVER['PHP_SELF']) == '/') ? '' : '/';
 
 		unset($_DATA['site']['user']);
 		unset($_DATA['site']['pass']);
@@ -94,7 +94,7 @@ function CMS_DATA() {
 
 	$_DATA['prev_page'] = create_link($_prev);
 	$_DATA['next_page'] = create_link($_next);
-
+	$_DATA['is_404'] = false;
 
 	// Navigation Menu output
 	$_DATA['menu'] = '<ul>';
@@ -111,6 +111,7 @@ function CMS_DATA() {
 	return $_DATA;
 }
 
+
 function WeaselCMS($_CMS) {
 
 	// Ugly and quick templating. Looking for a best way to implement this...
@@ -125,7 +126,43 @@ function WeaselCMS($_CMS) {
 
 }
 
-$_CMS = CMS_DATA();
-WeaselCMS($_CMS);
+if ( !empty($_GET['e']) ) {
+
+	header("HTTP/1.0 404 Not Found");
+	$res = htmlspecialchars(filter_var($_GET['e'], FILTER_SANITIZE_URL), ENT_QUOTES, 'utf-8');
+	$msg = "<pre><code>resource: <strong>".dirname($_SERVER['PHP_SELF'])."/".$res."</strong> not found :(</code></pre>";
+	$msg .= "<ul>";
+	$msg .= "<li>We are sorry but the page you are looking for has not been found.</li>";
+	$msg .= "<li>That is probably because it doesn't exist anymore or maybe it has just moved soemwhere else.</li>";
+	$msg .= "<li>Try checking the URL for errors, or you can always go to the amazing <a href='".dirname($_SERVER['PHP_SELF'])."'>Homepage</a>!</li>";
+	$msg .= "</ul>";
+
+	$_CMS = CMS_DATA();
+
+		unset( $_CMS['pages'] );
+		$_CMS['page'] = array(
+			'title' => 'Error 404. Not Found',
+			'description' => 'The requested resource is not available',
+			'content' => $msg,
+			'slug' => false,
+			'tags' => '404 Not Found',
+			'timedate' => date('l jS \of F Y @ h:i A'),
+			'datetime' => date('Y-m-d H:i:s'),
+			'link' => dirname($_SERVER['PHP_SELF']),
+		);
+		$_CMS['prev_page'] = dirname($_SERVER['PHP_SELF']);
+		$_CMS['next_page'] = dirname($_SERVER['PHP_SELF']);
+		$_CMS['is_404'] = true;
+
+	WeaselCMS($_CMS);
+	die();
+
+} else {
+
+	$_CMS = CMS_DATA();
+	WeaselCMS($_CMS);
+
+}
+
 
 ?>

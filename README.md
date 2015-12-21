@@ -77,6 +77,8 @@ All the elements that you can use when theming your website using Weasel CMS dat
 - `$_CMS['menu']` : Retuns an HTML unordered list with all the active pages linked to their pages. With an active class on the current element ( `class="active"` )
 - `$_CMS['prev_page']` full url friendly link to the previous page if exists, otherwise will return a link to the site url.
 - `$_CMS['next_page']` full url friendly link to the next page if exists, otherwise will return a link to the site url.
+- `$_CMS['is_404']` : Boolean returning if the page is a 404 not found file.
+
 
 #### Adding extra variables
 
