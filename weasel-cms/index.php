@@ -288,7 +288,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<title>Weasel CMS</title>
 	<meta name="author" content="Jorge Moreno aka Moro (@alterebro). http://moro.es" />
-	<link rel="stylesheet" type="text/css" href="styles/cms.min.css" />
+	<link rel="stylesheet" type="text/css" href="styles/weasel-cms.css" />
 </head>
 <body>
 
@@ -297,10 +297,10 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 	<?php if ( $_v['logged'] ) : ?>
 	<nav>
 		<ul>
-			<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>"><i class="fa fa-bars"></i> Dashboard</a></li>
-			<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=pages&amp;a=new"><i class="fa fa-file-text-o"></i> Create a new page</a></li>
-			<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=files"><i class="fa fa-upload"></i> Files</a></li>
-			<li><a href="?a=logout"><i class="fa fa-sign-out"></i> Log out</a></li>
+			<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>"><i class="fa fa-bars fa-fw"></i> <span>Dashboard</span></a></li>
+			<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=pages&amp;a=new"><i class="fa fa-file-text-o fa-fw"></i> <span>Create a new page</span></a></li>
+			<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=files"><i class="fa fa-upload fa-fw"></i> <span>Files</span></a></li>
+			<li><a href="?a=logout"><i class="fa fa-sign-out fa-fw"></i> <span>Log out</span></a></li>
 		</ul>
 	</nav>
 	<?php endif; ?>
@@ -309,12 +309,11 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
 <main>
 
-
 <?php $msg = get_message(); if ( !empty($msg) ) : ?>
-<div id="message" class="<?php echo ($msg['warning']) ? 'warning' : 'notice' ?>">
-	<?php echo ($msg['warning']) ? '<i class="fa fa-exclamation-triangle"></i>' : '<i class="fa fa-check"></i>' ?>
-	<?php echo $msg['string']; ?>
-</div>
+	<div id="message" class="<?php echo ($msg['warning']) ? 'warning' : 'notice' ?>">
+		<?php echo ($msg['warning']) ? '<i class="fa fa-exclamation-triangle fa-fw"></i>' : '<i class="fa fa-check fa-fw"></i>' ?>
+		<?php echo $msg['string']; ?>
+	</div>
 <?php endif; ?>
 
 
@@ -322,23 +321,25 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 <?php // LOGIN -------------- ?>
 
 
-	<h2>Log in</h2>
-	<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-		<p>
-			<label for="login-user">
-				<span><i class="fa fa-user"></i> Username</span>
-				<input type="text" name="login-user" id="login-user" />
-			</label>
-		</p>
-		<p>
-			<label for="login-pass">
-				<span><i class="fa fa-unlock-alt"></i> Password</span>
-				<input type="password" name="login-pass" id="login-pass" />
-			</label>
-		</p>
-		<p>
-			<input type="submit" value="Log In" name="login-submit" id="login-submit" />
-		</p>
+	<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="row">
+		<div class="column-one-third shift-one-third">
+			<h2><i class="fa fa-sign-in fa-fw"></i> Log in</h2>
+			<p>
+				<label for="login-user">
+					<span><i class="fa fa-user fa-fw"></i> Username</span>
+					<input type="text" name="login-user" id="login-user" placeholder="Your Username" />
+				</label>
+			</p>
+			<p>
+				<label for="login-pass">
+					<span><i class="fa fa-unlock-alt fa-fw"></i> Password</span>
+					<input type="password" name="login-pass" id="login-pass" placeholder="Your Password" />
+				</label>
+			</p>
+			<p>
+				<input type="submit" value="Log In" name="login-submit" class="button-main" id="login-submit" />
+			</p>
+		</div>
 	</form>
 
 <?php else : ?>
@@ -358,7 +359,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		$the_description = '';
 		$the_status = 'checked="checked" ';
 		$the_timestamp = false;
-		$the_label = 'Create Page';
+		$the_label = 'Create New Page';
 
 
 		// Get current item when editing
@@ -384,24 +385,25 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		}
 	?>
 
-		<h2><?php echo $the_label; ?></h2>
 		<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="row">
 
 			<section class="column-two-thirds">
+				<h2><i class="fa fa-files-o fa-fw"></i> <?php echo $the_label; ?></h2>
+
 				<input type="hidden" name="page-action" value="<?php echo $the_action; ?>" >
 				<?php if (!empty($the_timestamp)) : ?>
 				<input type="hidden" name="page-timestamp" value="<?php echo $the_timestamp ?>" />
 				<?php endif; ?>
 				<p>
 					<label for="page-title">
-						<span>Title</span>
-						<input type="text" name="page-title" id="page-title" value="<?php echo $the_title; ?>" required="required" class="full-width max-full-width" />
+						<span><i class="fa fa-font fa-fw"></i> Title</span>
+						<input type="text" name="page-title" id="page-title" value="<?php echo $the_title; ?>" required="required" class="full-width max-full-width" placeholder="The title of your page." />
 					</label>
 				</p>
 
 				<p class="no-margin">
 					<label for="page-content" class="no-margin">
-						<span>Page Content <small>( MarkDown / HTML Code )</small></span>
+						<span><i class="fa fa-file-code-o fa-fw"></i> Page Content <small>( MarkDown / HTML Code )</small></span>
 
 						<div class="wmd-panel">
 				            <div id="wmd-button-bar"></div>
@@ -412,42 +414,43 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
 				<p class="no-margin">
 			        <label class="no-margin">
-			        	<span>Page Content Preview</span>
+			        	<span><i class="fa fa-file-text-o fa-fw"></i> Page Content Preview</span>
 				        <div id="wmd-preview" class="wmd-panel wmd-preview markdown-body"></div>
 			        </label>
 				</p>
 			</section>
 
-			<section class="column-one-third">
+			<section class="column-one-third sidebar">
+				<h2><i class="fa fa-wrench fa-fw"></i> Page Properties</h2>
 				<p>
 					<label for="page-date">
-						<span><i class="fa fa-calendar-o"></i> Date</span>
+						<span><i class="fa fa-calendar-o fa-fw"></i> Date</span>
 						<input type="date" name="page-date" id="page-date" value="<?php echo $the_date; ?>" required="required" />
 					</label>
 				</p>
 				<p>
 					<label for="page-time">
-						<span><i class="fa fa-clock-o"></i> Time</span>
+						<span><i class="fa fa-clock-o fa-fw"></i> Time</span>
 						<input type="time" name="page-time" id="page-time" value="<?php echo $the_time; ?>" required="required" />
 					</label>
 				</p>
 
 				<p>
 					<label for="page-slug">
-						<span><i class="fa fa-link"></i> Slug <small>( URL friendly name of your page )</small></span>
-						<input type="text" name="page-slug" id="page-slug" value="<?php echo $the_slug; ?>" required="required" />
+						<span><i class="fa fa-link fa-fw"></i> Slug <small>( URL friendly name of your page )</small></span>
+						<input type="text" name="page-slug" id="page-slug" value="<?php echo $the_slug; ?>" required="required" placeholder="url-friendly-page-name" />
 					</label>
 				</p>
 				<p>
 					<label for="page-tags">
-						<span><i class="fa fa-tags"></i> Tags <small>( Comma separated values )</small></span>
-						<input type="text" name="page-tags" id="page-tags" value="<?php echo $the_tags; ?>" />
+						<span><i class="fa fa-tags fa-fw"></i> Tags <small>( Comma separated values )</small></span>
+						<input type="text" name="page-tags" id="page-tags" value="<?php echo $the_tags; ?>" placeholder="tag-1, tag-2, tag-3" />
 					</label>
 				</p>
 				<p>
 					<label for="page-description">
-						<span><i class="fa fa-align-left"></i> Short Description</span>
-						<textarea name="page-description" id="page-description" rows="10" cols="40"><?php echo $the_description; ?></textarea>
+						<span><i class="fa fa-align-left fa-fw"></i> Short Description</span>
+						<textarea name="page-description" id="page-description" rows="10" cols="40" placeholder="Small description of your page"><?php echo $the_description; ?></textarea>
 					</label>
 				</p>
 				<p>
@@ -458,18 +461,19 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 				</p>
 
 				<p>
-					<input type="submit" name="page-submit" value="<?php echo $the_label; ?>" />
+					<input type="submit" name="page-submit" class="button-main" value="<?php echo $the_label; ?>" />
 				</p>
 			</section>
 		</form>
 
 		<?php if (!empty($the_timestamp)) : ?>
-		<hr />
-		<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="page-remove-form">
-			<input type="hidden" name="page-action" value="remove" />
-			<input type="hidden" name="page-timestamp" value="<?php echo $the_timestamp ?>" />
-			<input type="submit" name="page-remove" id="page-remove" class="remove-button" value="Remove Page" />
-		</form>
+
+			<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="page-remove-form" class="column-one-third shift-two-thirds sidebar">
+				<input type="hidden" name="page-action" value="remove" />
+				<input type="hidden" name="page-timestamp" value="<?php echo $the_timestamp ?>" />
+				<input type="submit" name="page-remove" id="page-remove" class="remove-button" value="Remove Page" />
+			</form>
+
 		<?php endif; ?>
 
 	<?php elseif ( ($_v['block']) == 'files' ) : ?>
@@ -485,45 +489,45 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
 		<div class="row">
 
-			<section class="column-one-third">
-				<h2>Upload new Image</h2>
-				<p>
-					Only .jpg, .gif and .png image files are allowed.
-					<br />Maximum file size is 2Mb.
-				</p>
-
-				<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
-					<input type="file" name="fileupload-file" />
-					<input type="submit" name="fileupload-submit" value="Upload!" />
-				</form>
-			</section>
-
 			<section class="column-two-thirds">
-				<h2>Uploaded Images</h2>
-
+				<h2><i class="fa fa-file-image-o fa-fw"></i> Uploaded Images</h2>
 				<?php if(empty($files_dir)) : ?>
 					<p><i class="fa fa-exclamation-triangle"></i> No files uploaded.</p>
 				<?php else : ?>
 					<table>
 						<thead>
 							<tr>
-								<th>File Name</th>
-								<th class="align-right">Created on</th>
-								<th class="align-right">Remove File</th>
+								<th><i class="fa fa-file-o fa-fw"></i> File Name</th>
+								<th class="align-right"><i class="fa fa-calendar fa-fw"></i> Created on</th>
+								<th class="align-right"><i class="fa fa-trash fa-fw"></i> Remove File</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php foreach($files_dir as $file) : ?>
 							<tr>
 								<td><i class="fa fa-image fa-fw"></i> <a href="<?php echo $_c['files_folder'] . DIRECTORY_SEPARATOR . $file; ?>"><?php echo basename($file); ?></td>
-								<td class="align-right"><?php echo date ("d/m/y @H:i:s", filemtime($_c['files_folder'] . DIRECTORY_SEPARATOR . $file)); ?></td>
-								<td class="align-right"><a href="<?php echo $_SERVER['PHP_SELF'] . '?b=files&a=remove&file=' . basename($file); ?>" class="remove-file-button">Delete</a></td>
+								<td class="align-right"><i class="fa fa-clock-o fa-fw"></i> <?php echo date ("d/m/y @H:i:s", filemtime($_c['files_folder'] . DIRECTORY_SEPARATOR . $file)); ?></td>
+								<td class="align-right"><a href="<?php echo $_SERVER['PHP_SELF'] . '?b=files&a=remove&file=' . basename($file); ?>" class="remove-file-button"><i class="fa fa-trash fa-fw"></i> Delete</a></td>
 							</tr>
 							<?php endforeach; ?>
 						</tbody>
 					</table>
 				<?php endif; ?>
 			</section>
+
+			<section class="column-one-third sidebar">
+				<h2><i class="fa fa-upload fa-fw"></i> Upload new Image</h2>
+				<p>
+					Only .jpg, .gif and .png image files are allowed.
+					<br />Maximum file size is 2Mb.
+				</p>
+
+				<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
+					<p><input type="file" name="fileupload-file" /></p>
+					<p><input type="submit" name="fileupload-submit" class="button-main" value="Upload!" /></p>
+				</form>
+			</section>
+
 		</div>
 
 	<?php else : ?>
@@ -531,37 +535,65 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
 		<div class="row">
 
-			<section class="column-one-third">
-				<h2>Settings</h2>
+			<section class="column-two-thirds">
+				<h2><i class="fa fa-file fa-fw"></i> Pages</h2>
+				<table>
+					<thead>
+						<tr>
+							<th><i class="fa fa-file-o fa-fw"></i> Page Name</th>
+							<th class="align-right"><i class="fa fa-clock-o fa-fw"></i> Date/Time</th>
+							<th class="align-right td-status-row"><i class="fa fa-info-circle fa-fw"></i> Status</th>
+						</tr>
+					</thead>
+					<tbody>
+					<?php foreach ($db as $item) : ?>
+						<tr>
+							<td>
+								<i class="fa fa-file-text-o fa-fw"></i>&nbsp;
+								<a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=pages&amp;a=edit&amp;p=<?php echo $item['slug'] ?>"><?php echo $item['title'] ?></a>
+							</td>
+							<td class="align-right">
+								<small><i class="fa fa-calendar fa-fw"></i> <?php echo date("Y.m.d", $item['timedate']); ?>&nbsp; <i class="fa fa-clock-o fa-fw"></i> <?php echo date("H:i", $item['timedate']); ?></small>
+							</td>
+							<td class="align-center td-status-row"><?php echo ($item['active']) ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>' ; ?></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+				<p><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=pages&amp;a=new" class="button button-main">Create a new page <i class="fa fa-plus"></i></a></p>
+			</section>
+
+			<section class="column-one-third sidebar">
+				<h2><i class="fa fa-cog fa-fw"></i> Settings</h2>
 				<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 
 					<p>
 						<label for="site-language">
-							<span>Site Language <small>( 2 letter i.e: ES, EN )</small></span>
+							<span><i class="fa fa-globe fa-fw"></i> Site Language <small>( 2 letter i.e: ES, EN )</small></span>
 							<input type="text" name="site-language" id="site-language" value="<?php echo $_c['site_language']; ?>" />
 						</label>
 					</p>
 					<p>
 						<label for="site-title">
-							<span>Site Title</span>
+							<span><i class="fa fa-font fa-fw"></i> Site Title</span>
 							<input type="text" name="site-title" id="site-title" value="<?php echo $_c['site_title']; ?>" />
 						</label>
 					</p>
 					<p>
 						<label for="site-description">
-							<span>Site Description</span>
+							<span><i class="fa fa-align-left fa-fw"></i> Site Description</span>
 							<input type="text" name="site-description" id="site-description" value="<?php echo $_c['site_description']; ?>" />
 						</label>
 					</p>
 					<p>
 						<label for="site-keywords">
-							<span>Site Keywords <small>( Comma separated values )</small></span>
+							<span><i class="fa fa-tags fa-fw"></i> Site Keywords <small>( Comma separated values )</small></span>
 							<input type="text" name="site-keywords" id="site-keywords" value="<?php echo $_c['site_keywords']; ?>" />
 						</label>
 					</p>
 					<p>
 						<label for="site-theme">
-						 	<span>Theme</span>
+						 	<span><i class="fa fa-paint-brush fa-fw"></i> Theme</span>
 						 	<select name="site-theme" id="site-theme">
 		 						<?php
 									$themes = scandir('../theme');
@@ -575,38 +607,12 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 						 </label>
 					</p>
 					<p>
-						<input type="submit" name="settings-submit" id="settings-submit" value="Save Settings" />
+						<input type="submit" name="settings-submit" id="settings-submit" class="button-main" value="Save Settings" />
 					</p>
 				</form>
 			</section>
 
-			<section class="column-two-thirds">
-				<h2>Pages</h2>
-				<table>
-					<thead>
-						<tr>
-							<th>Date/Time</th>
-							<th class="align-right">Page Name</th>
-							<th class="align-right">Status</th>
-						</tr>
-					</thead>
-					<tbody>
-					<?php foreach ($db as $item) : ?>
-						<tr>
-							<td>
-								<i class="fa fa-file-text-o"></i>&nbsp;
-								<a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=pages&amp;a=edit&amp;p=<?php echo $item['slug'] ?>"><?php echo $item['title'] ?></a>
-							</td>
-							<td class="align-right">
-								<small><i class="fa fa-calendar"></i> <?php echo date("Y.m.j", $item['timedate']); ?>&nbsp; <i class="fa fa-clock-o"></i> <?php echo date("H:i", $item['timedate']); ?></small>
-							</td>
-							<td class="align-right"><?php echo ($item['active']) ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>' ; ?></td>
-						</tr>
-					<?php endforeach; ?>
-					</tbody>
-				</table>
-				<p class="align-right"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?b=pages&amp;a=new" class="button">Create a new page <i class="fa fa-plus"></i></a></p>
-			</section>
+
 
 		</div>
 	<?php endif; ?>
@@ -623,6 +629,6 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 	</p>
 </footer>
 
-<script src="scripts/cms.js"></script>
+<script src="scripts/weasel-cms.min.js"></script>
 </body>
 </html>

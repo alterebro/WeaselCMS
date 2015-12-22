@@ -13,7 +13,9 @@ var t=0;e.findTags(/#+[ ]*/,/[ ]*#+/),/#+/.test(e.startTag)&&(t=f.lastMatch.leng
 	}
 	var message = document.querySelector('#message');
 	if (!!message) {
-		setTimeout(function(){ message.style.display = 'none' }, 2000);
+		setTimeout(function(){
+			message.classList.add('hide');
+		}, 2000);
 	}
 
     var fileremover = document.querySelectorAll('.remove-file-button');
