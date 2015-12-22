@@ -23,7 +23,7 @@ function create_link($slug) {
 function CMS_DATA() {
 
 	$cms_folder = CMS_FOLDER;
-	$cms_version = '0.3.3';
+	$cms_version = '0.3.4';
 	require_once $cms_folder . 'lib/parsedown.php';
 
 	$_DATA = [];

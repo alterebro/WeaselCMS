@@ -352,7 +352,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		$the_action = 'create';
 		$the_title = '';
 		$the_content = '';
-		$the_date = date("Y-m-j");
+		$the_date = date("Y-m-d");
 		$the_time = date("H:i");
 		$the_slug = '';
 		$the_tags = '';
@@ -374,7 +374,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 			$the_action = 'edit';
 			$the_title = $db_current['title'];
 			$the_content = $db_current['content'];
-			$the_date = date("Y-m-j", $db_current['timedate']);
+			$the_date = date("Y-m-d", $db_current['timedate']);
 			$the_time = date("H:i", $db_current['timedate']);
 			$the_slug = $db_current['slug'];
 			$the_tags = implode(', ', $db_current['tags']);
