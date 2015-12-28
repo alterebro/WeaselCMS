@@ -51,7 +51,25 @@ strong {
 		<header class="four columns">
 			<h1><a href="{{ $_CMS['site']['path'] }}">{{ $_CMS['site']['site_title'] }}</a></h1>
 			<p>{{ $_CMS['site']['site_description'] }}</p>
-			<nav>{{ $_CMS['menu'] }}</nav>
+			<nav>
+
+
+				<!--
+					The code below is an example removing
+					the template variable : {#{ $_CMS['menu'] }#}
+					and creating a new nav menu customized list.
+				-->
+
+				<ul class="nav navbar-nav">
+					<?php foreach( $_CMS['pages'] as $page ) : ?>
+					<li{{ ($page['slug'] == $_CMS['page']['slug']) ? ' class="active"' : '' }}>
+						<a href="{{ $page['link'] }}" title="{{ $page['title'] }}">{{ $page['title'] }}</a>
+					</li>
+					<?php endforeach ?>
+				</ul>
+
+
+			</nav>
 		</header>
 
 		<main class="eight columns">
