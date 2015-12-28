@@ -43,10 +43,17 @@ Default installation user/pass pair is :
 You can change this login details on the `config.php` file
 
 
+--
+
+
 ### Theming
 
 Themes are located on the `/theme` folder and the main template file is the `ìndex.html` HTML file.
-Variables are placed using the double curly bracket syntax `{{ $variable_name }}` i.e: in order to print the page title you'll put the folliwing code in the html template: `{{ $_CMS['page']['title'] }}`
+Variables are placed using the double curly bracket syntax `{{ $variable_name }}` i.e: in order to print the page title you'll put the following code in the html template: `{{ $_CMS['page']['title'] }}`
+
+- **Available Themes**
+	- A couple of basic themes bundled on the Weasel CMS `theme` folder where you can start to hack and play around with them.
+	- [@iskono](https://github.com/iskono)'s theme based on dopetrope by html5up: **[iskono/WeaselCMS-THEME](https://github.com/iskono/WeaselCMS-THEME)**
 
 
 #### Variables
