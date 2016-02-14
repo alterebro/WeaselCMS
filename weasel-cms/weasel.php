@@ -23,7 +23,7 @@ function create_link($slug) {
 function CMS_DATA() {
 
 	$cms_folder = CMS_FOLDER;
-	$cms_version = '0.3.4';
+	$cms_version = '0.3.5';
 	require_once $cms_folder . 'lib/parsedown.php';
 
 	$_DATA = [];
@@ -126,14 +126,21 @@ function WeaselCMS($_CMS) {
 
 }
 
-if ( !empty($_GET['e']) ) {
+
+$xml_stuff = ['sitemap.xml', 'rss.xml'];
+if ( !empty($_GET['e']) && in_array($_GET['e'], $xml_stuff) ) {
+
+	$_CMS = CMS_DATA();
+	include 'weasel-cms/' . $_GET['e'] . '.php';
+
+} elseif ( !empty($_GET['e']) ) {
 
 	header("HTTP/1.0 404 Not Found");
 	$res = htmlspecialchars(filter_var($_GET['e'], FILTER_SANITIZE_URL), ENT_QUOTES, 'utf-8');
 	$msg = "<pre><code>resource: <strong>".dirname($_SERVER['PHP_SELF'])."/".$res."</strong> not found :(</code></pre>";
 	$msg .= "<ul>";
 	$msg .= "<li>We are sorry but the page you are looking for has not been found.</li>";
-	$msg .= "<li>That is probably because it doesn't exist anymore or maybe it has just moved soemwhere else.</li>";
+	$msg .= "<li>That is probably because it doesn't exist anymore or maybe it has just moved somewhere else.</li>";
 	$msg .= "<li>Try checking the URL for errors, or you can always go to the amazing <a href='".dirname($_SERVER['PHP_SELF'])."'>Homepage</a>!</li>";
 	$msg .= "</ul>";
 
@@ -163,6 +170,3 @@ if ( !empty($_GET['e']) ) {
 	WeaselCMS($_CMS);
 
 }
-
-
-?>

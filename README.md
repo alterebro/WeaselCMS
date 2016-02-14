@@ -107,6 +107,16 @@ For example, by adding at the end of the config array the new pair : `'my_var' =
 
 You can later call it by using the bracket syntax : `{{ $_CMS['site']['my_var'] }}`
 
+--
+
+### Weasel XML Data
+
+A basic *sitemaps* and *rss feed* files are provided by default with WeaselCMS and they are both accessible through the root of the site: 
+
+- http://YOURSITEURL/**sitemap.xml**
+- http://YOURSITEURL/**rss.xml**
+
+---
 
 ## Libraries used in Weasel CMS
 
