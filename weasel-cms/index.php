@@ -288,6 +288,9 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<title>Weasel CMS</title>
 	<meta name="author" content="Jorge Moreno aka Moro (@alterebro). http://moro.es" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+	<meta name="HandheldFriendly" content="True" />
+	<meta name="MobileOptimized" content="320" />
 	<link rel="stylesheet" type="text/css" href="styles/weasel-cms.css" />
 </head>
 <body>
