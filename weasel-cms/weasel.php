@@ -1,4 +1,6 @@
 <?php
+if ( !defined('CMS_FOLDER') ) { header('Location: ../'); }
+
 header('Content-Type: text/html; charset=utf-8');
 
 function create_link($slug) {
