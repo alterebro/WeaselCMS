@@ -9,46 +9,30 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" type="text/css" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" rel="stylesheet" type="text/css" />
-
-<style type="text/css">
-body {
-	font-weight: 300;
-	font-family: "Roboto", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: #666;
-}
-h1, h2, h3, h4, h5, h6 {
-	font-weight: 100;
-	letter-spacing: 0;
-}
-h1 { font-size: 3.2rem; }
-h2 { font-size: 2.8rem; }
-h3 { font-size: 2.6rem; }
-h4 { font-size: 2.4rem; }
-h5 { font-size: 1.8rem; }
-h6 { font-size: 1.6rem; }
-
-li { margin-bottom: .25rem; }
-a { text-decoration: none; }
-a:hover { color: #000; }
-
-strong {
-	font-weight: 400;
-}
-
-#main {
-	padding: 8rem 0 4rem 0;
-	font-size: 1.6rem;
-}
-.container { max-width: 1020px; }
-</style>
-
+	<link href="https://cdn.rawgit.com/alterebro/armazon.css/v0.3.1/armazon/armazon.min.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		body {
+			width: 90%;
+			max-width: 98rem;
+			margin: 4rem auto;
+			font-weight: 300;
+			font-family: "Roboto", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+			color: #666;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			font-weight: 300;
+			letter-spacing: 0;
+		}
+		strong { font-weight: 400; }
+		#main { font-size: 1.6rem; }
+		li { margin-bottom: .25rem; }
+	</style>
 </head>
-<body class="container">
+<body>
 
 	<div id="main" class="row">
 
-		<header class="four columns">
+		<header class="column-one-third">
 			<h1><a href="{{ $_CMS['site']['path'] }}">{{ $_CMS['site']['site_title'] }}</a></h1>
 			<p>{{ $_CMS['site']['site_description'] }}</p>
 			<nav>
@@ -59,7 +43,6 @@ strong {
 					the template variable : {#{ $_CMS['menu'] }#}
 					and creating a new nav menu customized list.
 				-->
-
 				<ul class="nav navbar-nav">
 				<?php
 					if ( !empty($_CMS['pages']) ) :
@@ -78,7 +61,7 @@ strong {
 			</nav>
 		</header>
 
-		<main class="eight columns">
+		<main class="column-two-thirds">
 			<article>
 				<header>
 					<h1>{{ $_CMS['page']['title'] }}</h1>
@@ -92,7 +75,6 @@ strong {
 					<?php if($_CMS['page']['tags']) : ?>&mdash; Tags : <em>{{ $_CMS['page']['tags'] }}<?php endif; ?></em>
 				</footer>
 				-->
-
 			</article>
 		</main>
 
