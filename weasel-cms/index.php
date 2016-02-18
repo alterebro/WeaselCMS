@@ -291,6 +291,8 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
 	<meta name="HandheldFriendly" content="True" />
 	<meta name="MobileOptimized" content="320" />
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Merriweather+Sans:700|Muli:300,400|Inconsolata:400" />
 	<link rel="stylesheet" type="text/css" href="styles/weasel-cms.css" />
 </head>
 <body>
