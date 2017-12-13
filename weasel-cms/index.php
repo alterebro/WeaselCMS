@@ -265,7 +265,10 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		$upload = Upload::factory( '', $root_folder );
 		$upload->file($_FILES['fileupload-file']);
 		$upload->set_max_file_size(2);
-		$upload->set_allowed_mime_types(array("image/jpeg", "image/png", "image/gif"));
+		$upload->set_allowed_mime_types(array("image/jpeg", "image/png", "image/gif", 
+                                          "application/msword", "application/pdf", "application/rtf",
+                                          "application/x-rar-compressed", "application/zip"
+                                          ));
 		$upload->set_filename($_FILES['fileupload-file']['name']);
 		$upload_output = $upload->upload();
 		$upload_error = $upload->get_errors();
@@ -495,7 +498,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		<div class="row">
 
 			<section class="column-two-thirds">
-				<h2><i class="fa fa-file-image-o fa-fw"></i> Uploaded Images</h2>
+				<h2><i class="fa fa-file-image-o fa-fw"></i> Uploaded Files</h2>
 				<?php if(empty($files_dir)) : ?>
 					<p><i class="fa fa-exclamation-triangle"></i> No files uploaded.</p>
 				<?php else : ?>
@@ -511,7 +514,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 							<?php foreach($files_dir as $file) : ?>
 							<tr>
 								<td><i class="fa fa-image fa-fw"></i> <a href="<?php echo $_c['files_folder'] . DIRECTORY_SEPARATOR . $file; ?>"><?php echo basename($file); ?></td>
-								<td class="align-right"><i class="fa fa-clock-o fa-fw"></i> <?php echo date ("d/m/y @H:i:s", filemtime($_c['files_folder'] . DIRECTORY_SEPARATOR . $file)); ?></td>
+								<td class="align-right"><i class="fa fa-clock-o fa-fw"></i> <?php echo date ("y-m-d @H:i:s", filemtime($_c['files_folder'] . DIRECTORY_SEPARATOR . $file)); ?></td>
 								<td class="align-right"><a href="<?php echo $_SERVER['PHP_SELF'] . '?b=files&a=remove&file=' . basename($file); ?>" class="remove-file-button"><i class="fa fa-trash fa-fw"></i> Delete</a></td>
 							</tr>
 							<?php endforeach; ?>
@@ -521,9 +524,11 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 			</section>
 
 			<section class="column-one-third sidebar">
-				<h2><i class="fa fa-upload fa-fw"></i> Upload new Image</h2>
+				<h2><i class="fa fa-upload fa-fw"></i> Upload new File</h2>
 				<p>
 					Only .jpg, .gif and .png image files are allowed.
+          <br/>Only .doc, .docx, .rtf and .pdf document files are allowed.
+          <br/>Only .zip and .rar archive files are allowed.
 					<br />Maximum file size is 2Mb.
 				</p>
 
