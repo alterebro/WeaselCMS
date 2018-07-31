@@ -118,6 +118,8 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		$_c['site_description'] = $_POST["site-description"];
 		$_c['site_keywords'] = $_POST["site-keywords"];
 		$_c['theme'] = $_POST["site-theme"];
+
+		$_c = array_map( function($i) { return htmlspecialchars($i, ENT_QUOTES, 'utf-8'); }, $_c );
 		file_put_contents('config.php', '<?php return ' . var_export($_c, true) . ';');
 
 		set_message('Settings Changed');
