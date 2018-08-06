@@ -30,6 +30,11 @@ function get_message() {
 	unset( $_SESSION['message'] );
 	return $output;
 }
+
+// -- Logged In?
+function is_logged() {
+	return ( isset($_SESSION['logged']) && $_SESSION['logged'] == true );
+}
 // ------------------
 
 
@@ -70,19 +75,25 @@ if ( empty($_SESSION['logged']) ) {
 		(isset($_POST['login-user']) && $_POST['login-user'] == $_c['user']) &&
 		(isset($_POST['login-pass']) && $_POST['login-pass'] == $_c['pass'])
 	) {
+
 		$_SESSION['logged'] = true;
+		set_message('Logged in successfully!');
 		header( 'Location: ' . $_SERVER['PHP_SELF'] );
+		exit();
 
 	} elseif(isset($_POST['login-user']) || isset($_POST['login-pass'])) {
 
 		set_message('Wrong user/pass', true);
+		header( 'Location: ' . $_SERVER['PHP_SELF'] );
+		exit();
 	}
 }
+
 
 // Logout check.
 if ( $_v['action'] == 'logout' ) {
 
-	if ( isset($_SESSION['logged']) && $_SESSION['logged'] == true ) {
+	if ( is_logged() ) {
 
 		$_SESSION['logged'] = false;
 		unset($_SESSION['logged']);
@@ -95,20 +106,24 @@ if ( $_v['action'] == 'logout' ) {
 
 // Check for removing files.
 if ( $_v['block'] == 'files' && $_v['action'] == 'remove' && isset($_GET['file']) ) {
-	$the_file = realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . $_c['files_folder']) . DIRECTORY_SEPARATOR . $_GET['file'];
-	if ( file_exists($the_file) ) {
-		unlink($the_file);
-	}
 
-	set_message('File removed successfully');
-	header( 'Location: ' . $_SERVER['PHP_SELF'] . '?b=files' );
-	exit();
+	if ( is_logged() ) {
+
+		$the_file = realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . $_c['files_folder']) . DIRECTORY_SEPARATOR . $_GET['file'];
+		if ( file_exists($the_file) ) {
+			unlink($the_file);
+		}
+
+		set_message('File removed successfully');
+		header( 'Location: ' . $_SERVER['PHP_SELF'] . '?b=files' );
+		exit();
+	}
 }
 
 
 // -----------------
 // POST
-if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+if ( $_SERVER['REQUEST_METHOD'] == 'POST' && is_logged() ) {
 
 	// -- Check for changes on the Settings.
 	if ( isset($_POST['settings-submit']) ) {
