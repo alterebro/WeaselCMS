@@ -310,7 +310,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' && is_logged() ) {
 	<meta name="MobileOptimized" content="320" />
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Merriweather+Sans:700|Muli:300,400|Inconsolata:400" />
-	<link rel="stylesheet" type="text/css" href="styles/weasel-cms.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo preg_replace('{/$}', '', dirname($_SERVER['SCRIPT_NAME'])); ?>/styles/weasel-cms.css" />
 </head>
 <body>
 
@@ -343,7 +343,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' && is_logged() ) {
 <?php // LOGIN -------------- ?>
 
 
-	<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="row">
+	<form method="POST" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>" class="row">
 		<div class="column-one-third shift-one-third">
 			<h2><i class="fa fa-sign-in fa-fw"></i> Log in</h2>
 			<p>
