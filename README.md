@@ -33,7 +33,7 @@ Apache `mod_rewrite` module enabled is recommended but not a requirement.
 1. Download the latest version of **Weasel CMS** from the GitHub repository : https://github.com/alterebro/WeaselCMS/releases/latest
 2. Upload the files to your PHP Server
 3. Change permissions to the following files / folder to make them writable: `config.php`, `db.dat`, `/files`.
-4. That's all, start using Weasel CMS.
+4. Thay's all, you can start using Weasel CMS. The url to log into the admin area will be located on `/weasel-cms`.
 
 Default installation user/pass pair is :
 
@@ -111,7 +111,7 @@ You can later call it by using the bracket syntax : `{{ $_CMS['site']['my_var'] 
 
 ### Weasel XML Data
 
-A basic *sitemaps* and *rss feed* files are provided by default with WeaselCMS and they are both accessible through the root of the site: 
+A basic *sitemaps* and *rss feed* files are provided by default with WeaselCMS and they are both accessible through the root of the site:
 
 - http://YOURSITEURL/**sitemap.xml**
 - http://YOURSITEURL/**rss.xml**
