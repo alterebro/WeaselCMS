@@ -1,6 +1,6 @@
 # WeaselCMS
 
-### Project Website: [http://weasel.moro.es](http://weasel.moro.es)
+### Project Website: [moro.es/weasel](https://moro.es/weasel/)
 
 ## Weasel. Lightweight flat file CMS written in PHP
 
